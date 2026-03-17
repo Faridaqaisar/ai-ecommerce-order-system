@@ -1,0 +1,278 @@
+{
+  "name": "verify-email",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "auth/verify-email",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1c9bfa34-46da-4947-81dc-8ceed4334841",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -656,
+        96
+      ],
+      "webhookId": "ffa61715-613d-498c-a149-da89283ba145",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "users",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "email",
+              "lookupValue": "={{ $json.body.email }}"
+            },
+            {
+              "lookupColumn": "verification_token",
+              "lookupValue": "={{ $json.body.token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "54976767-7d98-4d15-b50a-a8f2e12c4255",
+      "name": "Get User",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -432,
+        96
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "users",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "verification_token": "={{ $json.verification_token }}",
+            "is_verified": "true"
+          },
+          "matchingColumns": [
+            "verification_token"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "password_hash",
+              "displayName": "password_hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_verified",
+              "displayName": "is_verified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "verification_token",
+              "displayName": "verification_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "43c186e9-81f9-4ea6-bbf3-77d0fa8e3fd5",
+      "name": "Verify User",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -96,
+        96
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\n  \"success\": true,\n  \"message\": \"Email verified successfully\"\n}\n",
+        "options": {}
+      },
+      "id": "a007e290-13c7-491e-83ad-3a8a414bec29",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        208,
+        96
+      ]
+    }
+  ],
+  "pinData": {
+    "Respond Success": [
+      {
+        "json": {
+          "verification_token": "h98765444456",
+          "is_verified": false
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get User": {
+      "main": [
+        [
+          {
+            "node": "Verify User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify User": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "577c8c45-4c2c-4b00-bdb8-f6435b46ec63",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "ME7AmfM4XD7IZfNS",
+  "tags": []
+}

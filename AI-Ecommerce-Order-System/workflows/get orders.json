@@ -1,0 +1,200 @@
+{
+  "name": "get orders",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "get-orders",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -256,
+        0
+      ],
+      "id": "b997eeee-b7a7-4659-9c7a-721af36485fd",
+      "name": "Webhook",
+      "webhookId": "2895c461-b5ca-4b8f-a149-67d27aa97326"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "62b7c873-bb7c-4c79-bfd1-80adcf4a53e1",
+              "name": "user_id",
+              "value": "=={{ $json.query.user_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        16,
+        0
+      ],
+      "id": "e7edbbe6-a72d-47bc-901c-b6be61730bb9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "jsCode": "return items.map(item => ({\n  json: {\n    order_id: item.json.order_id,\n    items: JSON.parse(item.json.items_json),\n    total_amount: Number(item.json.total_amount),\n    status: item.json.status,\n    created_at: item.json.created_at\n  }\n}));\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        0
+      ],
+      "id": "9ad834e9-48d4-4362-a563-50d378062190",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ JSON.stringify({ success: true, data: $items().map(i => i.json) }) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        640,
+        0
+      ],
+      "id": "8c13ca7a-bbf2-48a8-b0fc-dcc906968b09",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 684066298,
+          "mode": "list",
+          "cachedResultName": "orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=684066298"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        0
+      ],
+      "id": "5fe7584c-1a40-4de3-a99b-12b9db71235b",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "priority": "u=0, i",
+            "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "document",
+            "sec-fetch-mode": "navigate",
+            "sec-fetch-site": "none",
+            "sec-fetch-user": "?1",
+            "upgrade-insecure-requests": "1",
+            "x-forwarded-for": "103.204.33.254",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "103.204.33.254"
+          },
+          "params": {},
+          "query": {
+            "user_id": "faridaqaisarqaisar@gmail.com"
+          },
+          "body": {},
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/get-orders",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "224f0629-0159-43ac-a133-085c546e7b43",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "6piWvpm8KoGeNY9V",
+  "tags": []
+}

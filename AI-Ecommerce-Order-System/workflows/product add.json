@@ -1,0 +1,334 @@
+{
+  "name": "product add",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "add",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -848,
+        -96
+      ],
+      "id": "0ba8e39e-cf4a-43a6-8b68-2221c3fa3f91",
+      "name": "Webhook",
+      "webhookId": "557b79a4-5ace-4427-8847-34ffd6bcc2d4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 865323051,
+          "mode": "list",
+          "cachedResultName": "products",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=865323051"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "image_url": "={{ $json.image_url }}",
+            "stock": "={{ $json.stock }}",
+            "size": "=",
+            "product_id": "={{ $json.product_id }}",
+            "created_at": "={{ $json.created_at }}",
+            "updated_at": "={{ $json.updated_at }}",
+            "name": "={{ $json.name }}",
+            "category_id": "={{ $json.category_id }}",
+            "gender": "={{ $json.gender }}",
+            "subcategory_id": "={{ $json.subcategory_id }}",
+            "price": "={{ $json.price }}",
+            "brand": "={{ $json.brand }}",
+            "status": "={{ $json.status }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "product_id",
+              "displayName": "product_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "category_id",
+              "displayName": "category_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "subcategory_id",
+              "displayName": "subcategory_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "price",
+              "displayName": "price",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "stock",
+              "displayName": "stock",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "size",
+              "displayName": "size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "brand",
+              "displayName": "brand",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "image_url",
+              "displayName": "image_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -400,
+        -80
+      ],
+      "id": "2666231e-27a5-4e9a-b94c-fe5ea5c39f0f",
+      "name": "Append row in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Product added successfully\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        -160,
+        -80
+      ],
+      "id": "fb222cd0-19fb-46c0-bfe1-6028b4b8313b",
+      "name": "Respond to Webhook",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body || $json;\n\nreturn [\n  {\n    json: {\n      product_id: Date.now(),\n      name: body.name,\n      category_id: body.category_id,\n      subcategory_id: body.subcategory || body.subcategory_id || \"\",\n      gender: body.gender,\n      price: Number(body.price || 0),\n      stock: Number(body.stock ?? 0),   // ✅ default to 0 if missing\n      brand: body.brand,\n      status: body.status || \"active\",\n      image_url: body.image_url,\n      created_at: new Date().toISOString(),\n      updated_at: new Date().toISOString()\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        -96
+      ],
+      "id": "07eefbce-08ab-4433-b763-4b88a8c7dbd7",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+            "content-length": "311",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "content-type": "application/json",
+            "origin": "https://shop-fairytale-fab.lovable.app",
+            "priority": "u=1, i",
+            "referer": "https://shop-fairytale-fab.lovable.app/",
+            "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "103.49.138.253",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "103.49.138.253"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "product_id": "765489",
+            "name": "ladies T shirt",
+            "category_id": "clotthing",
+            "subcategory": "T shirt",
+            "gender": "Women",
+            "price": 2000,
+            "brand": "puma",
+            "size": "M",
+            "stock": 4,
+            "status": "Active",
+            "image_url": "https://d16aymak0y9zsb.cloudfront.net/Sportsplus/product/1080x1080/26012026/52031116_1_1758289630-1536855048122.jpg"
+          },
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/add",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "32f6241c-2159-4189-9b58-46b387400ade",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "YCVxBfwqlcNEFhU0",
+  "tags": []
+}

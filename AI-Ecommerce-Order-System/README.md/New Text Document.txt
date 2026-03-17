@@ -1,0 +1,84 @@
+# 🛍️ AI Ecommerce Ordering System
+
+## 📌 Project Overview
+This project is a complete ecommerce ordering system built using Lovable (frontend) and n8n (backend automation).  
+Users can browse products, add to cart, place orders, and receive email confirmations.
+
+---
+
+## 🌐 Live Project
+Frontend (Lovable App):  
+https://shop-fairytale-fab.lovable.app
+
+---
+
+## 🎥 Demo Video
+Watch here:  
+https://drive.google.com/file/d/11Otyx1QzM75icgHIWG5xiBvANusAGF5P/view?usp=sharing
+
+---
+
+## 🚀 Features
+- Product listing (Shoes, Clothing, Accessories)
+- Category filtering (Men, Women, Kids)
+- Add to cart system
+- Order creation
+- Email confirmation (Gmail integration)
+- User authentication (Register / Login / Email Verification)
+
+---
+
+## 🧠 Tech Stack
+- Frontend: Lovable AI
+- Backend: n8n workflows
+- Database: Google Sheets
+
+---
+
+## 🔗 API Endpoints
+
+### 🔐 Authentication
+Register  
+https://n8n.faridaqaisar.site/webhook/auth/register  
+
+Login  
+https://n8n.faridaqaisar.site/webhook/auth/login  
+
+Verify Email  
+https://n8n.faridaqaisar.site/webhook/auth/verify-email  
+
+---
+
+### 📦 Products
+Add Product  
+https://n8n.faridaqaisar.site/webhook/add  
+
+Get Products  
+https://n8n.faridaqaisar.site/webhook/products  
+
+---
+
+### 🛒 Orders
+Create Order  
+https://n8n.faridaqaisar.site/webhook/create-order  
+
+Get Orders  
+https://n8n.faridaqaisar.site/webhook/get-orders  
+
+---
+
+## 📂 Project Structure
+
+- workflows → n8n JSON workflows  
+- demo → demo video  
+- documentation → project files  
+- images → screenshots  
+
+---
+
+## 👩‍💻 Author
+Farida Qaisar
+
+---
+
+⭐ If you like this project, give it a star!

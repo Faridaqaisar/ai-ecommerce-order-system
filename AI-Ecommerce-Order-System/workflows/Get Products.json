@@ -1,0 +1,171 @@
+{
+  "name": "Get Products",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "products",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Products Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "f51ce8c9-04ae-4246-87a9-e364f6389342",
+      "webhookId": "ac3c6d62-9c4d-4ff4-a9a0-fe187d556c42"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 865323051,
+          "mode": "list",
+          "cachedResultName": "products",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=865323051"
+        },
+        "options": {}
+      },
+      "name": "Read Products",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        320,
+        0
+      ],
+      "id": "0094c8e9-6bf5-472e-8515-34bc27fbe242",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, data: $json }) }}\n",
+        "options": {}
+      },
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        752,
+        0
+      ],
+      "id": "eb750ef6-4c19-43a8-9b5a-9e92abd1a72c",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "include": "specifiedFields",
+        "fieldsToInclude": "row_number, product_id, name, category_id, subcategory_id, gender, price, stock, brand, status, image_url, updated_at",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        528,
+        0
+      ],
+      "id": "cf9885e2-a69d-43de-bf5f-1f591864efe7",
+      "name": "Aggregate",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Products Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36 LikeWise/95.6.5783.54",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-US,en;q=0.9",
+            "if-none-match": "W/\"25b-Sjdysp75da5DjZChAgnUKDKh4RU\"",
+            "origin": "https://fashionstep.lovable.app",
+            "priority": "u=1, i",
+            "referer": "https://fashionstep.lovable.app/",
+            "sec-ch-ua": "\"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "34.134.67.122",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "34.134.67.122"
+          },
+          "params": {},
+          "query": {},
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/products",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Products Webhook": {
+      "main": [
+        [
+          {
+            "node": "Read Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Products": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "b0f41cce-a136-4143-a422-75fcffc7c1cb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "U9XRbfyeSod27pZT",
+  "tags": []
+}

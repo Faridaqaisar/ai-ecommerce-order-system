@@ -1,0 +1,292 @@
+{
+  "name": "Create Order",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "create-order",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "name": "Create Order Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        16
+      ],
+      "id": "f0c7c116-0399-42c0-b309-44827f780c96",
+      "webhookId": "c6013999-c0ff-433a-bae4-36e3862613cd",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 684066298,
+          "mode": "list",
+          "cachedResultName": "orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=684066298"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "order_id": "={{ $json.order_id }}",
+            "total_amount": "={{ $json.total_amount }}",
+            "status": "={{ $json.status }}",
+            "items_json": "={{ $json.items_json }}",
+            "custmor email": "={{ $json.customer_email }}",
+            "created_at": "={{ $json.created_at }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "order_id",
+              "displayName": "order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "custmor email",
+              "displayName": "custmor email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "items_json",
+              "displayName": "items_json",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "total_amount",
+              "displayName": "total_amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Append Order",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        464,
+        16
+      ],
+      "id": "e682617f-9870-4183-b8d1-b505ac07b73a",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}\n\n",
+        "options": {}
+      },
+      "name": "Respond",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        848,
+        0
+      ],
+      "id": "9c8d21e6-9265-4400-baf7-137f47983a4e"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Create Order Webhook').item.json.body.customer_email }}",
+        "subject": "🛍️ Order Confirmation — Thank you for your order!",
+        "message": "=Hi,\n\nThank you for your order! 🎉\n\nHere are your order details:\n\nOrder ID: {{ $json.order_id }}\nOrder Status: {{ $json.status }}\nTotal Amount: Rs {{ $json.total_amount }}\n\nItems:\n{{ $json.items_json }}\n\nOrder Date: {{ $json.created_at }}\n\nWe are currently processing your order and will notify you once it is shipped.\n\nIf you have any questions, feel free to reply to this email.\n\nThank you for shopping with us!\nFashionStep Team\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        672,
+        16
+      ],
+      "id": "a47ea9c0-55a5-4ec6-bdf2-7f3f0c05c68b",
+      "name": "Send a message",
+      "webhookId": "30d90952-7f8e-4d06-953f-190137d56298",
+      "alwaysOutputData": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "obCMPvo0gLonyy9q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body;\n\nreturn [\n  {\n    json: {\n      order_id: Date.now().toString(),\n      customer_email: body.customer_email,\n      total_amount: Number(body.total),\n      status: \"paid\", // 🔥 FORCE PAID\n      created_at: new Date().toISOString(),\n      items_json: JSON.stringify(body.items || [])\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        16
+      ],
+      "id": "8e3c77e7-f6fb-4e6d-81d6-cc574e27d940",
+      "name": "Code in JavaScript",
+      "alwaysOutputData": true
+    }
+  ],
+  "pinData": {
+    "Create Order Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36",
+            "content-length": "206",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "content-type": "application/json",
+            "origin": "https://shop-fairytale-fab.lovable.app",
+            "priority": "u=1, i",
+            "referer": "https://shop-fairytale-fab.lovable.app/",
+            "sec-ch-ua": "\"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"144\", \"Google Chrome\";v=\"144\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "103.253.18.208",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "103.253.18.208"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "customer_email": "farida.aimlengineer.pk@gmail.com",
+            "items": [
+              {
+                "product_id": 1770205741157,
+                "name": "man t shirt",
+                "quantity": 1,
+                "price": 1500,
+                "size": "S"
+              }
+            ],
+            "total": 1500,
+            "payment_method": "cash",
+            "status": "pending"
+          },
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/create-order",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Create Order Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append Order": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Append Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "78f9a393-a4e0-400b-b50b-2868c3dc202b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "xqMTreEvN8lWOOg3",
+  "tags": []
+}

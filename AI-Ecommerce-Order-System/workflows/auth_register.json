@@ -1,0 +1,345 @@
+{
+  "name": "auth/register",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "auth/register",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Register Webhook1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2624,
+        64
+      ],
+      "id": "5663b0af-8408-4802-a27e-f5c0bcb26df1",
+      "webhookId": "caedd48e-4b55-4475-8317-9b0797c87bff",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Register Webhook1').item.json.body.email }}",
+        "subject": "Verify your email to activate your account",
+        "message": "=<p>✅ Your email has been verified successfully.</p>\n<p>You can now sign in or go to the homepage:</p>\n\n<a href=\"https://shop-fairytale-fab.lovable.app/login\" \n   style=\"display:inline-block; padding:10px 20px; margin:5px; background-color:#4CAF50; color:white; text-decoration:none; border-radius:5px;\">\n   Sign In\n</a>\n\n<a href=\"https://shop-fairytale-fab.lovable.app/\" \n   style=\"display:inline-block; padding:10px 20px; margin:5px; background-color:#2196F3; color:white; text-decoration:none; border-radius:5px;\">\n   Go to Home\n</a>\n",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -2176,
+        64
+      ],
+      "id": "ef3076fc-0a79-42e0-ac14-6f686f494121",
+      "name": "Send a message",
+      "webhookId": "63ee8c02-8222-4c69-915b-200039fde7d2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "obCMPvo0gLonyy9q",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5093983e-98ee-497d-8432-11a18d580a76",
+              "name": "password",
+              "value": "={{ $json.body.password }}",
+              "type": "string"
+            },
+            {
+              "id": "b8cdf0f2-9da1-4095-865e-31c3b7bd04f6",
+              "name": "aAccess_token",
+              "value": "={{ $json.body.password.hash().hash() }}",
+              "type": "string"
+            },
+            {
+              "id": "ca01727d-6b85-4659-94d1-003a3c99facf",
+              "name": "email",
+              "value": "={{ $json.body.email }}",
+              "type": "string"
+            },
+            {
+              "id": "a4ad91a6-14a7-4256-a6cc-f8f24d557017",
+              "name": "Role",
+              "value": "={{ $json.body.email === \"faridaqaisarqaisar@gmail.com\" ? \"admin\" : \"user\" }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2400,
+        64
+      ],
+      "id": "cc9bc7e3-b525-4952-a4ea-7311aca20449",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"success\": true,\n  \"message\": \"Registration successful. Please verify your email.\",\n  \"user\": {\n    \"id\": \"={{ $json.id }}\",\n    \"name\": \"={{ $json.name }}\",\n    \"email\": \"={{ $json.email }}\",\n    \"is_verified\": \"={{ $json.is_verified }}\",\n    \"role\": \"={{ $json.Role.trim() }}\"\n  }\n}\n",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "name": "respond to webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -1680,
+        64
+      ],
+      "id": "ad52413e-e0ae-42e1-aff4-15be02aa0f68"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s",
+          "mode": "list",
+          "cachedResultName": "users_db",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "users",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S8JPmwpe_dUlrZCFWmA3KUDdOnHgtlDXwVjzzoIe25s/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "password_hash": "={{ $('Edit Fields').item.json.password }}",
+            "verification_token": "={{ $('Edit Fields').item.json.aAccess_token }}",
+            "updated_at": "={{ $now }}",
+            "email": "={{ $('Register Webhook1').item.json.body.email }}",
+            "created_at": "={{ $today }}",
+            "name": "={{ $('Register Webhook1').item.json.body.name }}",
+            "Role": "={{ $('Edit Fields').item.json.Role }}",
+            "is_verified": "True"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "password_hash",
+              "displayName": "password_hash",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_verified",
+              "displayName": "is_verified",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "verification_token",
+              "displayName": "verification_token",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "updated_at",
+              "displayName": "updated_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Role",
+              "displayName": "Role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "name": "Append",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4,
+      "position": [
+        -1952,
+        64
+      ],
+      "id": "6e7dbd72-887a-41d7-be0c-57db5f9b0ecb",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eLwRK0Adg2zOo8Bz",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Register Webhook1": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.faridaqaisar.site",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36",
+            "content-length": "75",
+            "accept": "*/*",
+            "accept-encoding": "gzip, deflate, br, zstd",
+            "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+            "content-type": "application/json",
+            "origin": "https://fashionstep.lovable.app",
+            "priority": "u=1, i",
+            "referer": "https://fashionstep.lovable.app/",
+            "sec-ch-ua": "\"Google Chrome\";v=\"143\", \"Chromium\";v=\"143\", \"Not A(Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"Windows\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "cross-site",
+            "x-forwarded-for": "103.253.18.237",
+            "x-forwarded-host": "n8n.faridaqaisar.site",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "ff71e4ccd5c5",
+            "x-real-ip": "103.253.18.237"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "name": "bilal",
+            "email": "faridaqaisarqaisar@gmail.com",
+            "password": "ki0909"
+          },
+          "webhookUrl": "https://n8n.faridaqaisar.site/webhook/auth/register",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Register Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append": {
+      "main": [
+        [
+          {
+            "node": "respond to webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "7d4c5772-5226-4a40-a317-b728421bde1b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "5042a90c563d96f608c055878127823db4c0f0a359b706a2f776c8efa4137849"
+  },
+  "id": "UE3xbOEmCd4TY8b7",
+  "tags": []
+}
